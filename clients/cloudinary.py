@@ -19,7 +19,7 @@ class Cloudinary:
         results: list[dict] = []
 
         try:
-            shop_dir = f'{cfg.SITE_NAME}/upload/shop'
+            shop_dir = f'{cfg.ROOT}/upload/shop'
             response = cloudinary.Search()\
                 .expression(f'folder:{shop_dir}/{dir}')\
                 .sort_by('uploaded_at', 'asc')\

@@ -1,15 +1,17 @@
 import logging
 import logging.config
+import config as cfg
 
 from typing import List
 from clients.cloudinary import Cloudinary
-import config as cfg
+from clients.woocommerce import WooCommerce
 
 log = logging.basicConfig(level=logging.DEBUG)
 
 if __name__ == "__main__":
-    cloudinary = Cloudinary()
+    #cloudinary = Cloudinary()
 
+    """
     # Has been uploaded
     excludes = [
         'RG20-S17B12-P1010277',
@@ -20,3 +22,7 @@ if __name__ == "__main__":
         'RG042-S29B18-P1010403'
     ]
     print(cloudinary.get_assets_shop('ring', excludes))
+    """
+
+    wc = WooCommerce()
+    print(wc.get_products(limit=2))
