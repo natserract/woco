@@ -1,7 +1,7 @@
 import logging
 import cloudinary
 import cloudinary.api
-import config as cfg
+import woco.config as cfg
 
 logger = logging.getLogger(__name__)
 

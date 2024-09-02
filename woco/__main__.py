@@ -6,9 +6,9 @@ import logging
 import logging.config
 from typing import List
 
-from cli import run
-from cli.arguments.default_arguments import add_logging_options
-from shared.utils import configure_logging
+from woco.cli import run
+from woco.cli.arguments.default_arguments import add_logging_options
+from woco.shared.utils import configure_logging
 
 logger = logging.getLogger(__name__)
 

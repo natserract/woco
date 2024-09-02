@@ -1,5 +1,6 @@
 import logging
-import config as cfg
+import woco.config as cfg
+
 from woocommerce import API as wcapi
 
 logger = logging.getLogger(__name__)

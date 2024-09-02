@@ -4,7 +4,7 @@ from typing import (
     Optional,
     Text,
 )
-import config as cfg
+import woco.config as cfg
 
 def configure_logging(
     log_level: Optional[int] = None,

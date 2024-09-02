@@ -2,10 +2,10 @@ import argparse
 import os
 from typing import List
 
-from cli import SubParsersAction
-from cli.arguments.run import set_run_arguments
-from shared.data import get_data_files, is_config_file
-from shared.io import read_config_file
+from woco.cli import SubParsersAction
+from woco.cli.arguments.run import set_run_arguments
+from woco.shared.data import get_data_files, is_config_file
+from woco.shared.io import read_config_file
 
 def add_subparser(
     subparsers: SubParsersAction, parents: List[argparse.ArgumentParser]

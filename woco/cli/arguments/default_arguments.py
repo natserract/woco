@@ -2,7 +2,7 @@ import argparse
 import logging
 from typing import Text, Union, Optional
 
-from shared.constants import DEFAULT_DATA_PATH
+from woco.shared.constants import DEFAULT_DATA_PATH
 
 def add_data_param(
     parser: Union[argparse.ArgumentParser, argparse._ActionsContainer],
