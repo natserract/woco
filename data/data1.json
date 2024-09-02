@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "name": "RG-029",
+      "type": "simple",
+      "price": "75",
+      "regular_price": "75",
+      "description": "RG-029",
+      "categories": [
+        { "id": 27, "name": "Jewellery", "slug": "jewellery" },
+        { "id": 31, "name": "Ring", "slug": "ring" }
+      ],
+      "price_html": "<span class=\"woocommerce-Price-amount amount\"><bdi><span class=\"woocommerce-Price-currencySymbol\">&euro;</span>75</bdi></span>",
+      "meta_data": [
+        { "key": "_wcml_custom_prices_status", "value": "1" },
+        { "key": "_sale_price_dates_to_IDR", "value": "" },
+        { "key": "_sale_price_dates_from_IDR", "value": "" },
+        { "key": "_sale_price_IDR", "value": "" },
+        { "key": "_regular_price_IDR", "value": "1200000" },
+        { "key": "_wcml_schedule_IDR", "value": "0" },
+        { "key": "_price_IDR", "value": "1200000" },
+        {
+          "key": "cloudinary_transformations_terms",
+          "value": ["category:27", "category:31"]
+        },
+        { "key": "_cloudinary_featured_overwrite", "value": "" }
+      ],
+      "stock_status": "instock",
+      "images": [
+        {
+          "src": "https://res.cloudinary.com/dmg89x9bd/images/f_auto,q_auto/v1725243298/mathiaschaize.com/upload/shop/ring/RG029-28-P1010287/RG029-28-P1010287.jpg?_i=AA",
+          "name": "RG042-S29B18-P1010403",
+          "alt": ""
+        }
+      ]
+    }
+  ]
+}
