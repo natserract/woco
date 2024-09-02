@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "woco"
+version = "0.1.0"
+description = ""
+authors = ["Natserract <natserract@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

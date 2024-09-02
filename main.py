@@ -1,2 +1,22 @@
+import logging
+import logging.config
+
+from typing import List
+from clients.cloudinary import Cloudinary
+import config as cfg
+
+log = logging.basicConfig(level=logging.DEBUG)
+
 if __name__ == "__main__":
-    print('Hello')
+    cloudinary = Cloudinary()
+
+    # Has been uploaded
+    excludes = [
+        'RG20-S17B12-P1010277',
+        'RG041-S15B28-P1010402',
+        'RG023-S17B12-P1010281',
+        'RG035-S40B20-P1010396',
+        'RG018-S20B15-P1010274',
+        'RG042-S29B18-P1010403'
+    ]
+    print(cloudinary.get_assets_shop('ring', excludes))
