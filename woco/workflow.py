@@ -2,7 +2,7 @@ import os
 import argparse
 import re
 import logging
-import json
+import time
 
 from pathlib import Path
 from datetime import datetime
@@ -81,8 +81,11 @@ class Workflow:
 
                         # Request
                         logger.info(f"Create product: {payload['name']}")
+                        start_time = time.time()
                         product = self._woocommerce.add_products(payload)
-                        logger.info(f"Successfully add {product['id']}, {product['name']}")
+                        end_time = time.time()
+                        logger.info(f"Successfully add {product['id']}, {product['name']}. Total time: {end_time - start_time}")
+
                         payloads.append({
                             **payload,
                             'id': product['id'],
@@ -98,18 +101,6 @@ class Workflow:
                 raise NotImplementedError
                 sys.exit(1)
 
-        except Exception as ex:
-            raise ValueError(ex)
-            sys.exit(1)
-
-    def run_update_workflow(
-         self, config_path: str, key_path: str
-    ):
-        try:
-            path = os.path.join(config_path)
-            config = read_config_file(path)
-            models = config['model']
-            raise NotImplementedError
         except Exception as ex:
             raise ValueError(ex)
             sys.exit(1)
@@ -130,19 +121,28 @@ class Workflow:
                 product_image_ids = item['image_ids']
 
                 logger.info(f"Delete product: {product_id}")
+                start_time = time.time()
                 self._woocommerce.remove_product(product_id)
-                logger.info(f"Successfully remove {product_id}")
+                end_time = time.time()
+                logger.info(f"Successfully remove {product_id}. Total time: {end_time - start_time}")
 
         except Exception as ex:
             raise ValueError(ex)
             sys.exit(1)
 
+    def run_update_workflow(
+          self, config_path: str, key_path: str
+     ):
+         raise NotImplementedError
 
     def _fetch_assets(self, image: dict) -> list[dict]:
         logger.info('Fetch images from media storage')
         assets = self._media_storage.get_assets(
             dir=image['path'],
-            sort_by=(image['sort']['name'], image['sort']['order_by']),
+            sort_by=(
+                image['sort']['name'] or 'uploaded_at',
+                image['sort']['order_by'] or 'asc'
+            ),
             max_results=image.get('max_results') or 2,
             excludes=image['excludes']
         )
