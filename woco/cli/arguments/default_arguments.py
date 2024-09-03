@@ -35,6 +35,16 @@ def add_config_param(
         help="Path to config file",
     )
 
+def add_key_param(
+    parser: Union[argparse.ArgumentParser, argparse._ActionsContainer],
+) -> None:
+    parser.add_argument(
+        "-k",
+        "--key",
+        type=str,
+        help="Param to get file name from out file (.woco)",
+    )
+
 
 def add_logging_options(parser: argparse.ArgumentParser) -> None:
     """Add options to an argument parser to configure logging levels."""

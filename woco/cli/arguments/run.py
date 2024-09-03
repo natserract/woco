@@ -1,7 +1,7 @@
 import argparse
 
 from typing import Union
-from woco.cli.arguments.default_arguments import add_data_param, add_config_param
+from woco.cli.arguments.default_arguments import add_data_param, add_config_param, add_key_param
 from woco.shared import constants
 
 def set_run_arguments(parser: argparse.ArgumentParser) -> None:
@@ -10,6 +10,16 @@ def set_run_arguments(parser: argparse.ArgumentParser) -> None:
     add_config_param(parser)
     add_disable_out_files(parser)
     add_media_source(parser)
+
+def set_run_update_arguments(parser: argparse.ArgumentParser) -> None:
+    add_config_param(parser)
+    add_media_source(parser)
+    add_key_param(parser)
+
+def set_run_remove_arguments(parser: argparse.ArgumentParser) -> None:
+    add_config_param(parser)
+    add_media_source(parser)
+    add_key_param(parser)
 
 def add_disable_out_files(
     parser: Union[argparse.ArgumentParser, argparse._ArgumentGroup]
