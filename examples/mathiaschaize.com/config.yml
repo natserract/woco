@@ -16,7 +16,7 @@ model:
         - "RG018-S20B15-P1010274"
         - "RG042-S29B18-P1010403"
         - "RG029-28-P1010287"
-      max_results: 8
+      max_results: 15
 
     product:
       type: "simple"

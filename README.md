@@ -1,4 +1,5 @@
 # Woco
+[[!Demo](demo.gif)]
 
 <img src="https://github.com/natserract/woco/blob/main/demo.gif" alt="screenshot" width="100%"/>
 
