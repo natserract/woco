@@ -2,13 +2,14 @@ import os
 import argparse
 import re
 import logging
+import json
 
 from pathlib import Path
 from datetime import datetime
 from typing import Literal, Optional, Text, Any, Union
 from woco.shared.constants import STORE_PATH
 from woco.shared.data import get_data_files, is_config_file
-from woco.shared.io import dump_obj_as_json_to_file, read_config_file
+from woco.shared.io import dump_obj_as_json_to_file, read_config_file, read_json_file
 from woco.shared.utils import normalize_name
 from woco.clients.media_storage.base import MediaStorage
 from woco.clients.media_storage.cloudinary import Cloudinary
@@ -79,16 +80,18 @@ class Workflow:
                         )
 
                         # Request
-                        logger.info(f"Send request {payload['name']} to WordPress Rest API")
+                        logger.info(f"Create product: {payload['name']}")
                         product = self._woocommerce.add_products(payload)
                         logger.info(f"Successfully add {product['id']}, {product['name']}")
                         payloads.append({
                             **payload,
-                            'id': product['id']
+                            'id': product['id'],
+                            'image_ids': [img['id'] for img in product['images']]
                         })
 
                     if not self._options['disable_out_file']:
                         self._write_data_store_file(model['name'], payloads)
+
             elif self.is_local_source:
                 raise NotImplementedError
             else:
@@ -98,6 +101,42 @@ class Workflow:
         except Exception as ex:
             raise ValueError(ex)
             sys.exit(1)
+
+    def run_update_workflow(
+         self, config_path: str, key_path: str
+    ):
+        try:
+            path = os.path.join(config_path)
+            config = read_config_file(path)
+            models = config['model']
+            raise NotImplementedError
+        except Exception as ex:
+            raise ValueError(ex)
+            sys.exit(1)
+
+    def run_remove_workflow(
+         self, config_path: str, key_path: str
+    ):
+        try:
+            path = os.path.join(config_path)
+            config = read_config_file(path)
+            models = config['model']
+
+            # Read key path .json
+            dir = STORE_PATH
+            data = read_json_file(f"{dir}/{key_path}.json")
+            for item in data:
+                product_id = item['id']
+                product_image_ids = item['image_ids']
+
+                logger.info(f"Delete product: {product_id}")
+                self._woocommerce.remove_product(product_id)
+                logger.info(f"Successfully remove {product_id}")
+
+        except Exception as ex:
+            raise ValueError(ex)
+            sys.exit(1)
+
 
     def _fetch_assets(self, image: dict) -> list[dict]:
         logger.info('Fetch images from media storage')
@@ -127,7 +166,6 @@ class Workflow:
                 sys.exit(1)
         else:
             dump_obj_as_json_to_file(file_path, assets)
-
 
 
 class PayloadBuilder:

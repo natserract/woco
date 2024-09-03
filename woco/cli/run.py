@@ -58,7 +58,31 @@ def run(args: argparse.Namespace) -> None:
         raise ValueError(ex)
 
 def run_update(args: argparse.Namespace) -> None:
-    print('run_update')
+    try:
+        config = get_validated_config(args.config)
+        workflow = Workflow(
+            options={
+                'media_source': args.media,
+            }
+        )
+        workflow.run_update_workflow(
+            config_path=config,
+            key_path=args.key,
+        )
+    except Exception as ex:
+        raise ValueError(ex)
 
 def run_remove(args: argparse.Namespace) -> None:
-    print('run_remove')
+    try:
+        config = get_validated_config(args.config)
+        workflow = Workflow(
+            options={
+                'media_source': args.media,
+            }
+        )
+        workflow.run_remove_workflow(
+            config_path=config,
+            key_path=args.key,
+        )
+    except Exception as ex:
+        raise ValueError(ex)
