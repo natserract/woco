@@ -2,7 +2,7 @@ import argparse
 import logging
 from typing import Text, Union, Optional
 
-from woco.shared.constants import DEFAULT_DATA_PATH
+from woco.shared.constants import DEFAULT_DATA_PATH, DEFAULT_CONFIG_PATH
 
 def add_data_param(
     parser: Union[argparse.ArgumentParser, argparse._ActionsContainer],
@@ -11,6 +11,7 @@ def add_data_param(
     data_type: Text = "Woco ",
 ) -> None:
     parser.add_argument(
+        "-d",
         "--data",
         default=default,
         nargs="+",
@@ -21,6 +22,19 @@ def add_data_param(
         # from user input", so we toggle it only if our default is not set
         required=required and default is None,
     )
+
+def add_config_param(
+    parser: Union[argparse.ArgumentParser, argparse._ActionsContainer],
+    default: Optional[Text] = DEFAULT_CONFIG_PATH,
+) -> None:
+    parser.add_argument(
+        "-c",
+        "--config",
+        type=str,
+        default=default,
+        help="Path to config file",
+    )
+
 
 def add_logging_options(parser: argparse.ArgumentParser) -> None:
     """Add options to an argument parser to configure logging levels."""

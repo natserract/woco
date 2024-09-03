@@ -1,3 +1,28 @@
-data:
-  - path: "data"
-    format: "json"
+model:
+  - name: "jewellery/ring"
+
+    image:
+      path: "mathiaschaize.com/upload/shop/ring"
+      sort:
+        - name: "uploaded_at"
+          order_by: "desc"
+
+    product:
+      type: "simple"
+      prices:
+        - euro:
+            value: 75
+            default: true
+        - idr:
+            value: 1200000
+      stock_status: "instock"
+      categories:
+        - jewellery:
+            id: 27
+            name: "Jewellery"
+            slug: "jewellery"
+
+        - ring:
+            id: 31
+            name: "Ring"
+            slug: "ring"
