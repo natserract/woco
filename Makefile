@@ -1,11 +1,4 @@
-install:
-	pyenv exec python3 -m venv .venv
-	. .venv/bin/activate && python setup.py install
-
-dev:
-	python woco/__main__.py
-
-build-package:
+build-source:
 	pip install build
 	python -m build
 	pip install -e .
