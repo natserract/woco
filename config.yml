@@ -4,8 +4,19 @@ model:
     image:
       path: "mathiaschaize.com/upload/shop/ring"
       sort:
-        - name: "uploaded_at"
-          order_by: "desc"
+        name: "uploaded_at"
+        order_by: "asc"
+      excludes:
+        # Has been uploaded
+        # Excluded by filename
+        - "RG20-S17B12-P1010277"
+        - "RG041-S15B28-P1010402"
+        - "RG023-S17B12-P1010281"
+        - "RG035-S40B20-P1010396"
+        - "RG018-S20B15-P1010274"
+        - "RG042-S29B18-P1010403"
+        - "RG029-28-P1010287"
+      max_results: 8
 
     product:
       type: "simple"

@@ -22,3 +22,7 @@ woco run --config config.yml
 # (Source: use local, define own price)
 woco run -d data/jewellery_ring.json -c config.yml
 woco run --data data/jewellery_ring.json --config config.yml
+
+woco run -d data/jewellery_ring.json -c config.yml -t post
+woco run --data data/jewellery_ring.json --config config.yml --type post
+woco run --data data/jewellery_ring.json --config config.yml --type patch

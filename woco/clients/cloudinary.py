@@ -1,4 +1,5 @@
 import logging
+from typing import Literal, Tuple, Union
 import cloudinary
 import cloudinary.api
 import woco.config as cfg
@@ -13,17 +14,20 @@ class Cloudinary:
             api_secret=cfg.CLOUDINARY_API_SECRET,
         )
 
-    def get_assets_shop(
-        self, dir: str, excludes: list[str] = []
+    def get_assets(
+        self,
+        dir: str,
+        sort_by: Tuple[str, Literal['asc', 'desc']] = ('uploaded_at', 'asc'),
+        max_results = 2,
+        excludes: list[str] = [] # filename
     ):
         results: list[dict] = []
 
         try:
-            shop_dir = f'{cfg.ROOT}/upload/shop'
             response = cloudinary.Search()\
-                .expression(f'folder:{shop_dir}/{dir}')\
-                .sort_by('uploaded_at', 'asc')\
-                .max_results(2)\
+                .expression(f'folder:{dir}')\
+                .sort_by(sort_by[0], sort_by[1])\
+                .max_results(max_results)\
                 .execute()
             data: list[dict] | None = response.get('resources')
             if data:
