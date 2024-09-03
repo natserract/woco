@@ -1,0 +1,29 @@
+# LIST OF ALL AVAILABLES WOCO COMMANDS
+
+# Custom config path (default: config.yml)
+woco run -c custom_config.yml #or
+woco run --config config.yml
+
+# Shows all available commands
+woco run -h #or
+woco run --help
+
+# Main parts
+# Upload products
+woco run
+
+# Remove products
+woco run remove -k <file_name_in_.woco_directory> # e.g. jewellery_ring_2024-09-03T21:59:01.184323 (without file format)
+
+# Update products. This feature still haven't implemented yet
+woco run update -k <file_name_in_.woco_directory>
+
+# Use local dataset (default: cloud). This feature still haven't implemented yet
+# By default uses cloudinary (-m cloud)
+woco run -d data/jewellery_ring.json -c config.yml -m local
+
+# Disabled generate out file in .woco directory
+woco run -c config.yml --disable-out-file
+
+# Logging configuration
+woco run -c config.yml -v

@@ -42,7 +42,7 @@ def add_key_param(
         "-k",
         "--key",
         type=str,
-        help="Param to get file name from out file (.woco)",
+        help="Param to get file name from out file (.woco). Without file format",
     )
 
 
