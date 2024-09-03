@@ -4,8 +4,10 @@ import argparse
 import sys
 import logging
 import logging.config
-from typing import List
+import platform
 
+from typing import List
+from woco import version
 from woco.cli import run
 from woco.cli.arguments.default_arguments import add_logging_options
 from woco.shared.utils import configure_logging
@@ -19,6 +21,14 @@ def create_argument_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description="Woco command line interface.",
     )
+
+    parser.add_argument(
+        '--version',
+        action='store_true',
+        default=argparse.SUPPRESS,
+        help="Print installed Woco version",
+    )
+
     parent_parser = argparse.ArgumentParser(add_help=False)
     add_logging_options(parent_parser)
     parent_parsers = [parent_parser]
@@ -26,6 +36,13 @@ def create_argument_parser() -> argparse.ArgumentParser:
 
     run.add_subparser(subparsers, parents=parent_parsers)
     return parser
+
+def print_version() -> None:
+    """Prints version information of woco tooling and python."""
+    print(f"Woco Version      :         {version.__version__}")
+    print(f"Python Version    :         {platform.python_version()}")
+    print(f"Operating System  :         {platform.platform()}")
+    print(f"Python Path       :         {sys.executable}")
 
 def main() -> None:
     arg_parser = create_argument_parser()
@@ -37,6 +54,8 @@ def main() -> None:
     try:
         if hasattr(cmdline_arguments, "func"):
             cmdline_arguments.func(cmdline_arguments)
+        elif hasattr(cmdline_arguments, "version"):
+            print_version()
         else:
             # user has not provided a subcommand, let's print the help
             logger.error("No command specified.")
