@@ -25,11 +25,12 @@ def add_subparser(
 def run(args: argparse.Namespace) -> None:
     try:
         config = get_validated_config(args.config)
-
-        workflow = Workflow()
-        workflow.run_workflow(
-            config_path=config,
-            disable_out_file=args.disable_out_file
+        workflow = Workflow(
+            options={
+                'disable_out_file': args.disable_out_file,
+                'media_source': args.media,
+            }
         )
+        #workflow.run_workflow(config_path=config)
     except Exception as ex:
         raise ValueError(ex)

@@ -5,7 +5,7 @@ import logging
 
 from pathlib import Path
 from datetime import datetime
-from typing import Optional, Text, Any, Union
+from typing import Literal, Optional, Text, Any, Union
 from woco.shared.constants import STORE_PATH
 from woco.shared.data import get_data_files, is_config_file
 from woco.shared.io import dump_obj_as_json_to_file, read_config_file
@@ -16,14 +16,28 @@ from woco.clients.woocommerce import WooCommerce
 
 logger = logging.getLogger(__name__)
 
+OPTIONS = Literal[
+    'disable_out_file',
+    'media_source',
+]
+
 class Workflow:
     def __init__(
         self,
         media_storage: Optional['MediaStorage'] = None,
-        payload_builder: Optional['PayloadBuilder'] = None
+        payload_builder: Optional['PayloadBuilder'] = None,
+        options: dict[OPTIONS, Any] = {}
     ) -> None:
         self._woocommerce = WooCommerce()
 
+        default_opts: dict[OPTIONS, Any] = {
+            'disable_out_file': False,
+            'media_source': 'cloud',
+        }
+        self._options: dict[OPTIONS, Any] = {
+            **default_opts,
+            **options, # let overrides default options
+        }
         if media_storage is not None:
             self._media_storage = media_storage
         else:
@@ -35,41 +49,47 @@ class Workflow:
             self._payload_builder = DefaultPayloadBuilder()
 
     def run_workflow(
-        self, config_path: str, disable_out_file=False
+        self, config_path: str
     ):
         try:
             path = os.path.join(config_path)
             config = read_config_file(path)
             models = config['model']
 
-            for model in models:
-                product_model = model['product']
-                image_model = model['image']
-                images = self._fetch_assets(image_model)
-                payloads = []
-                for image in images:
-                    payload = self._payload_builder.build_payload(
-                        product_model=product_model,
-                        image_model=image_model,
-                        image_data=image
-                    )
+            # Option: Media storage source
+            if self._is_cloud_source:
+                for model in models:
+                    product_model = model['product']
+                    image_model = model['image']
+                    images = self._fetch_assets(image_model)
+                    payloads = []
+                    for image in images:
+                        payload = self._payload_builder.build_payload(
+                            product_model=product_model,
+                            image_model=image_model,
+                            image_data=image
+                        )
 
-                    # Request
-                    logger.info(f"Send request {payload['name']} to WordPress Rest API")
-                    product = self._woocommerce.add_products(payload)
-                    logger.info(f"Successfully add {product['id']}, {product['name']}")
-                    payloads.append({
-                        **payload,
-                        id: product['id']
-                    })
+                        # Request
+                        logger.info(f"Send request {payload['name']} to WordPress Rest API")
+                        product = self._woocommerce.add_products(payload)
+                        logger.info(f"Successfully add {product['id']}, {product['name']}")
+                        payloads.append({
+                            **payload,
+                            id: product['id']
+                        })
 
-                if not disable_out_file:
-                    self._write_data_store_file(model['name'], payloads)
+                    if not self._options['disable_out_file']:
+                        self._write_data_store_file(model['name'], payloads)
+            elif self._is_local_source:
+                raise NotImplementedError
+            else:
+                raise NotImplementedError
+                sys.exit(1)
 
         except Exception as ex:
             raise ValueError(ex)
             sys.exit(1)
-
 
     def _fetch_assets(self, image: dict) -> list[dict]:
         logger.info('Fetch images from media storage')
@@ -99,6 +119,14 @@ class Workflow:
                 sys.exit(1)
         else:
             dump_obj_as_json_to_file(file_path, assets)
+
+    @property
+    def _is_local_source(self):
+        return self._options['media_source'] == 'local'
+
+    @property
+    def _is_cloud_source(self):
+        return self._options['media_source'] == 'cloud'
 
 
 class PayloadBuilder:
