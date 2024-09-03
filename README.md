@@ -1,9 +1,5 @@
 # Woco
 
-<video width="500" height="800" controls>
-  <source src="https://github.com/natserract/woco/blob/main/demo.mp4" type="video/mp4">
-</video>
-
 Command line interface for uploading WooCommerce(WC) products in efficient way.
 
 ## Installation
