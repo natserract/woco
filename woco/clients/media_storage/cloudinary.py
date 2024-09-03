@@ -1,17 +1,23 @@
 import logging
-from typing import Literal, Tuple, Union
 import cloudinary
 import cloudinary.api
-import woco.config as cfg
+
+from typing import Literal, Tuple, Union
+from woco.config import (
+    CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET
+)
+from woco.clients.media_storage.base import MediaStorage
 
 logger = logging.getLogger(__name__)
 
-class Cloudinary:
+class Cloudinary(MediaStorage):
     def __init__(self) -> None:
         config = cloudinary.config(
-            cloud_name=cfg.CLOUDINARY_CLOUD_NAME,
-            api_key=cfg.CLOUDINARY_API_KEY,
-            api_secret=cfg.CLOUDINARY_API_SECRET,
+            cloud_name=CLOUDINARY_CLOUD_NAME,
+            api_key=CLOUDINARY_API_KEY,
+            api_secret=CLOUDINARY_API_SECRET,
         )
 
     def get_assets(

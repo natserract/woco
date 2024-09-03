@@ -8,12 +8,20 @@ from typing import Optional, Text, Any, Union
 from woco.shared.constants import STORE_PATH
 from woco.shared.data import get_data_files, is_config_file
 from woco.shared.io import dump_obj_as_json_to_file, read_config_file
-from woco.clients.cloudinary import Cloudinary
 from woco.shared.utils import normalize_name
+from woco.clients.media_storage.base import MediaStorage
+from woco.clients.media_storage.cloudinary import Cloudinary
 
 class Workflow:
-    def __init__(self, payload_builder: Optional['PayloadBuilder'] = None) -> None:
-        self._media_storage = Cloudinary()
+    def __init__(
+        self,
+        media_storage: Optional['MediaStorage'] = None,
+        payload_builder: Optional['PayloadBuilder'] = None
+    ) -> None:
+        if media_storage is not None:
+            self._media_storage = media_storage
+        else:
+            self._media_storage = Cloudinary()
 
         if payload_builder is not None:
             self._payload_builder = payload_builder
