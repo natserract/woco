@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import logging
 import logging.config
@@ -139,3 +140,6 @@ def get_validated_config(
     config = validate_config_path(config, default_config)
 
     return config
+
+def normalize_name(name: str):
+    return re.sub(r'[^a-zA-Z0-9]', '_', name)

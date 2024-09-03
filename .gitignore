@@ -32,3 +32,4 @@ terms
 .vscode
 build
 dist
+.woco/

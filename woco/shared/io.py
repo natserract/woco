@@ -92,5 +92,28 @@ def read_yaml(content: Text, reader_type: Union[Text, List[Text]] = "safe") -> A
 
     return yaml_parser.load(content) or {}
 
+def write_text_file(
+    content: Text,
+    file_path: Union[Text, Path],
+    encoding: Text = DEFAULT_ENCODING,
+    append: bool = False,
+) -> None:
+    """Writes text to a file.
+
+    Args:
+        content: The content to write.
+        file_path: The path to which the content should be written.
+        encoding: The encoding which should be used.
+        append: Whether to append to the file or to truncate the file.
+
+    """
+    mode = "a" if append else "w"
+    with open(file_path, mode, encoding=encoding) as file:
+        file.write(content)
+
+def dump_obj_as_json_to_file(filename: Union[Text, Path], obj: Any) -> None:
+    """Dump an object as a json string to a file."""
+    write_text_file(json.dumps(obj, ensure_ascii=False, indent=2), filename)
+
 def _is_ascii(text: Text) -> bool:
     return all(ord(character) < 128 for character in text)
