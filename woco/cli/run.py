@@ -31,6 +31,6 @@ def run(args: argparse.Namespace) -> None:
                 'media_source': args.media,
             }
         )
-        #workflow.run_workflow(config_path=config)
+        workflow.run_workflow(config_path=config)
     except Exception as ex:
         raise ValueError(ex)

@@ -17,8 +17,8 @@ from woco.clients.woocommerce import WooCommerce
 logger = logging.getLogger(__name__)
 
 OPTIONS = Literal[
-    'disable_out_file',
-    'media_source',
+    'disable_out_file', # bool
+    'media_source', # local, cloud
 ]
 
 class Workflow:
@@ -48,6 +48,14 @@ class Workflow:
         else:
             self._payload_builder = DefaultPayloadBuilder()
 
+    @property
+    def is_local_source(self):
+        return self._options['media_source'] == 'local'
+
+    @property
+    def is_cloud_source(self):
+        return self._options['media_source'] == 'cloud'
+
     def run_workflow(
         self, config_path: str
     ):
@@ -57,7 +65,7 @@ class Workflow:
             models = config['model']
 
             # Option: Media storage source
-            if self._is_cloud_source:
+            if self.is_cloud_source:
                 for model in models:
                     product_model = model['product']
                     image_model = model['image']
@@ -76,12 +84,12 @@ class Workflow:
                         logger.info(f"Successfully add {product['id']}, {product['name']}")
                         payloads.append({
                             **payload,
-                            id: product['id']
+                            'id': product['id']
                         })
 
                     if not self._options['disable_out_file']:
                         self._write_data_store_file(model['name'], payloads)
-            elif self._is_local_source:
+            elif self.is_local_source:
                 raise NotImplementedError
             else:
                 raise NotImplementedError
@@ -120,13 +128,6 @@ class Workflow:
         else:
             dump_obj_as_json_to_file(file_path, assets)
 
-    @property
-    def _is_local_source(self):
-        return self._options['media_source'] == 'local'
-
-    @property
-    def _is_cloud_source(self):
-        return self._options['media_source'] == 'cloud'
 
 
 class PayloadBuilder:

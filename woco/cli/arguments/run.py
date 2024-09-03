@@ -8,21 +8,8 @@ def set_run_arguments(parser: argparse.ArgumentParser) -> None:
     """Arguments for running Woco directly using `woco run`."""
     add_data_param(parser)
     add_config_param(parser)
-    add_type_argument(parser)
     add_disable_out_files(parser)
     add_media_source(parser)
-
-def add_type_argument(
-    parser: Union[argparse.ArgumentParser, argparse._ArgumentGroup]
-) -> None:
-    """Add an argument for type."""
-    parser.add_argument(
-        "-t",
-        "--type",
-        default=constants.DEFAULT_METHOD_TYPE,
-        choices=['post', 'patch'],
-        help="Type of request methods to send data to WordPress REST API",
-    )
 
 def add_disable_out_files(
     parser: Union[argparse.ArgumentParser, argparse._ArgumentGroup]
