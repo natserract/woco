@@ -1,6 +1,7 @@
 import os
 import argparse
 import re
+import logging
 
 from pathlib import Path
 from datetime import datetime
@@ -11,6 +12,9 @@ from woco.shared.io import dump_obj_as_json_to_file, read_config_file
 from woco.shared.utils import normalize_name
 from woco.clients.media_storage.base import MediaStorage
 from woco.clients.media_storage.cloudinary import Cloudinary
+from woco.clients.woocommerce import WooCommerce
+
+logger = logging.getLogger(__name__)
 
 class Workflow:
     def __init__(
@@ -18,6 +22,8 @@ class Workflow:
         media_storage: Optional['MediaStorage'] = None,
         payload_builder: Optional['PayloadBuilder'] = None
     ) -> None:
+        self._woocommerce = WooCommerce()
+
         if media_storage is not None:
             self._media_storage = media_storage
         else:
@@ -39,7 +45,6 @@ class Workflow:
             for model in models:
                 product_model = model['product']
                 image_model = model['image']
-
                 images = self._fetch_assets(image_model)
                 payloads = []
                 for image in images:
@@ -48,7 +53,15 @@ class Workflow:
                         image_model=image_model,
                         image_data=image
                     )
-                    payloads.append(payload)
+
+                    # Request
+                    logger.info(f"Send request {payload['name']} to WordPress Rest API")
+                    product = self._woocommerce.add_products(payload)
+                    logger.info(f"Successfully add {product['id']}, {product['name']}")
+                    payloads.append({
+                        **payload,
+                        id: product['id']
+                    })
 
                 if not disable_out_file:
                     self._write_data_store_file(model['name'], payloads)
@@ -59,6 +72,7 @@ class Workflow:
 
 
     def _fetch_assets(self, image: dict) -> list[dict]:
+        logger.info('Fetch images from media storage')
         assets = self._media_storage.get_assets(
             dir=image['path'],
             sort_by=(image['sort']['name'], image['sort']['order_by']),
@@ -74,6 +88,7 @@ class Workflow:
         file_name = f"{normalize_name(name)}_{timestamp}"
         file_path = Path(f"{dir}/{file_name}.json")
 
+        logger.info(f"Store out file to {dir}/{file_name}.json")
         if not os.path.exists(dir):
             try:
                 os.makedirs(dir)
@@ -109,9 +124,10 @@ class DefaultPayloadBuilder(PayloadBuilder):
     def build_payload(
         self, product_model: dict, image_model: dict, image_data: dict, **kwargs: Any
     ):
+        logger.info(f'Build structured payload...')
         payload = {
             "type": product_model['type'],
-            "categories": product_model['categories'],
+            "categories": [],
             "stock_status": product_model['stock_status'],
             "images": [],
             "meta_data": [
@@ -150,8 +166,8 @@ class DefaultPayloadBuilder(PayloadBuilder):
                 regular_price = p
                 price_key = key
 
-        payload['price'] = regular_price['value']
-        payload['regular_price'] = regular_price['value']
+        payload['price'] = str(regular_price['value'])
+        payload['regular_price'] = str(regular_price['value'])
         payload['price_html'] = \
             f"<span class=\"woocommerce-Price-amount amount\"><bdi><span class=\"woocommerce-Price-currencySymbol\">&{str(regular_price['currency']).lower()};</span>{regular_price['value']}</bdi></span>",
 
@@ -171,22 +187,25 @@ class DefaultPayloadBuilder(PayloadBuilder):
                 { "key": f"_sale_price_{currency}", "value": "" },
             )
             payload['meta_data'].append(
-                { "key": f"_regular_price_{currency}", "value": value },
+                { "key": f"_regular_price_{currency}", "value": str(value) },
             )
             payload['meta_data'].append(
                 { "key": f"_wcml_schedule_{currency}", "value": "0" },
             )
             payload['meta_data'].append(
-                { "key": f"_price_{currency}", "value": value },
+                { "key": f"_price_{currency}", "value": str(value) },
             )
 
-        # cloudinary metadata
+        # Set product categories
+        # Set cloudinary metadata
         cloudinary_tf_term_payload = {
             "key": "cloudinary_transformations_terms",
             "value": []
         }
         for categories in product_model['categories']:
             category = list(dict(categories).values())[0]
+            payload['categories'].append(category)
+
             cloudinary_tf_term_payload['value'].append(
                 f"category:{category['id']}"
             )

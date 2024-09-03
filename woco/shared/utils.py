@@ -11,19 +11,22 @@ from typing import (
     Literal
 )
 from pathlib import Path
-import woco.config as cfg
+from woco.config import DEFAULT_LOG_LEVEL
 from woco.shared.constants import DEFAULT_CONFIG_PATH
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 def configure_logging(
     log_level: Optional[int] = None,
 ) -> None:
     _log_level = log_level
     if _log_level is None:
-        _log_level = logging.getLevelName(cfg.DEFAULT_LOG_LEVEL)
+        _log_level = logging.getLevelName(DEFAULT_LOG_LEVEL)
 
-    logging.getLogger(__name__).setLevel(_log_level)
+    logging.getLogger().setLevel(_log_level)
+
+    handler = logging.StreamHandler()
+    logger.addHandler(handler)
 
 @overload
 def get_validated_path(
