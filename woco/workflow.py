@@ -28,7 +28,9 @@ class Workflow:
         else:
             self._payload_builder = DefaultPayloadBuilder()
 
-    def run_workflow(self, config_path: str):
+    def run_workflow(
+        self, config_path: str, disable_out_file=False
+    ):
         try:
             path = os.path.join(config_path)
             config = read_config_file(path)
@@ -48,7 +50,8 @@ class Workflow:
                     )
                     payloads.append(payload)
 
-                self._write_data_store_file(model['name'], payloads)
+                if not disable_out_file:
+                    self._write_data_store_file(model['name'], payloads)
 
         except Exception as ex:
             raise ValueError(ex)

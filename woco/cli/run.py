@@ -25,7 +25,11 @@ def add_subparser(
 def run(args: argparse.Namespace) -> None:
     try:
         config = get_validated_config(args.config)
+
         workflow = Workflow()
-        workflow.run_workflow(config_path=config)
+        workflow.run_workflow(
+            config_path=config,
+            disable_out_file=args.disable_out_file
+        )
     except Exception as ex:
         raise ValueError(ex)
