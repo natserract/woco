@@ -127,4 +127,4 @@ model:
 By default Woco uses [Cloudinary](https://cloudinary.com/) to stored images. If you need custom implementation, please use this `implementor` [woco/clients/media_storage/base.py](woco/clients/media_storage/base.py)
 
 ## Custom Payload
-Woco have [default payload builder](woco/workflow.py#L183) based on our needs. You can implement your own implementation here woco/workflow.py#L171
+Woco have [default payload builder](woco/workflow.py#L183) based on our needs. You can implement your own implementation here [`PayloadBuilder`](woco/workflow.py#L171)
