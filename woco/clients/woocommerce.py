@@ -17,10 +17,9 @@ class WooCommerce:
     def get_products(self, limit=20):
         try:
             products = self.wc\
-                .get("products", params={"per_page": limit})\
-                .json()
-
-            return products
+                .get("products", params={"per_page": limit})
+            products.raise_for_status()
+            return products.json()
         except Exception as ex:
             logger.exception(f"Failed to get products. {ex}")
             raise ValueError(str(ex))
@@ -28,18 +27,18 @@ class WooCommerce:
     def get_product(self, id: str):
         try:
             product = self.wc\
-                .get(f"products/{id}")\
-                .json()
-
-            return product
+                .get(f"products/{id}")
+            product.raise_for_status()
+            return product.json()
         except Exception as ex:
             logger.exception(f"Failed to get product. {ex}")
             raise ValueError(str(ex))
 
     def add_products(self, payload: dict):
         try:
-            product = self.wc.post('products', data=payload).json()
-            return product
+            product = self.wc.post('products', data=payload)
+            product.raise_for_status()
+            return product.json()
         except Exception as ex:
             logger.exception(f"Failed to add products. {ex}")
             raise ValueError(str(ex))
