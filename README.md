@@ -1,5 +1,7 @@
 # Woco
 
+![Demo](demo.gif)
+
 Command line interface for uploading WooCommerce(WC) products in efficient way.
 
 ## Installation
