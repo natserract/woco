@@ -4,8 +4,6 @@ from dotenv import load_dotenv
 load_dotenv(verbose=True, override=True)
 
 SITE_URL = os.environ.get('SITE_URL', "") # endpoint for woocommerce
-WP_USERNAME = os.environ.get('WP_USERNAME', "")
-WP_PASSWORD = os.environ.get('WP_PASSWORD', "")
 CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL', "")
 CLOUDINARY_CLOUD_NAME = os.environ.get('CLOUDINARY_CLOUD_NAME', "")
 CLOUDINARY_API_KEY = os.environ.get('CLOUDINARY_API_KEY', "")
