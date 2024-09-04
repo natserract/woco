@@ -68,6 +68,8 @@ class Workflow:
             # Option: Media storage source
             if self.is_cloud_source:
                 for model in models:
+                    logger.info(f"Processing: {model['name']}")
+
                     product_model = model['product']
                     image_model = model['image']
                     images = self._fetch_assets(image_model)
@@ -94,6 +96,8 @@ class Workflow:
 
                     if not self._options['disable_out_file']:
                         self._write_data_store_file(model['name'], payloads)
+
+                    logger.info(f"Done: {model['name']}")
 
             elif self.is_local_source:
                 raise NotImplementedError
@@ -140,11 +144,11 @@ class Workflow:
         assets = self._media_storage.get_assets(
             dir=image['path'],
             sort_by=(
-                image['sort']['name'] or 'uploaded_at',
-                image['sort']['order_by'] or 'asc'
+                image['sort']['name'],
+                image['sort']['order_by'],
             ),
             max_results=image.get('max_results') or 2,
-            excludes=image['excludes']
+            excludes=image.get('excludes') or []
         )
 
         return assets
