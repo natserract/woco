@@ -1,22 +1,12 @@
 model:
-  - name: "jewellery/ring"
+  - name: "jewellery/earing"
 
     image:
-      path: "mathiaschaize.com/upload/shop/ring"
+      path: "mathiaschaize.com/upload/shop/earing"
       sort:
         name: "uploaded_at"
-        order_by: "asc"
-      excludes:
-        # Has been uploaded
-        # Excluded by filename
-        - "RG20-S17B12-P1010277"
-        - "RG041-S15B28-P1010402"
-        - "RG023-S17B12-P1010281"
-        - "RG035-S40B20-P1010396"
-        - "RG018-S20B15-P1010274"
-        - "RG042-S29B18-P1010403"
-        - "RG029-28-P1010287"
-      max_results: 15
+        order_by: "desc"
+      max_results: 300
 
     product:
       type: "simple"
@@ -36,7 +26,98 @@ model:
             name: "Jewellery"
             slug: "jewellery"
 
-        - ring:
-            id: 31
-            name: "Ring"
-            slug: "ring"
+        - earring:
+            id: 29
+            name: "Earring"
+            slug: "earring"
+
+  - name: "bag"
+
+    image:
+      path: "mathiaschaize.com/upload/shop/bag"
+      sort:
+        name: "uploaded_at"
+        order_by: "desc"
+      max_results: 300
+
+    product:
+      type: "simple"
+      price:
+        euro:
+          value: 75
+          default: true
+          currency: EURO
+        idr:
+          value: 1200000
+          currency: IDR
+
+      stock_status: "instock"
+      categories:
+        - bag:
+            id: 23
+            name: "Bag"
+            slug: "bag"
+
+  - name: "clothes/men"
+
+    image:
+      path: "mathiaschaize.com/upload/shop/collections/man"
+      sort:
+        name: "uploaded_at"
+        order_by: "desc"
+      max_results: 300
+
+    product:
+      type: "simple"
+      price:
+        euro:
+          value: 75
+          default: true
+          currency: EURO
+        idr:
+          value: 1200000
+          currency: IDR
+
+      stock_status: "instock"
+      categories:
+        - clothes:
+            id: 24
+            name: "Clothes"
+            slug: "clothes"
+
+        - men:
+            id: 25
+            name: "Men"
+            slug: "men"
+
+  - name: "clothes/women"
+
+    image:
+      path: "mathiaschaize.com/upload/shop/collections/women"
+      sort:
+        name: "uploaded_at"
+        order_by: "desc"
+      max_results: 300
+
+    product:
+      type: "simple"
+      price:
+        euro:
+          value: 75
+          default: true
+          currency: EURO
+        idr:
+          value: 1200000
+          currency: IDR
+
+      stock_status: "instock"
+      categories:
+        - clothes:
+            id: 24
+            name: "Clothes"
+            slug: "clothes"
+
+        - women:
+            id: 26
+            name: "Women"
+            slug: "women"
