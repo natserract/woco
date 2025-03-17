@@ -206,13 +206,35 @@ class DefaultPayloadBuilder(PayloadBuilder):
             ]
         }
 
-        # Set product name
-        match = re.match(r'([A-Z]+)(\d+)', image_data['filename'])
-        if match:
-            product_name = f"{match.group(1)}-{match.group(2)}"
-            payload['name'] = product_name
+        if product_model['prefix']:
+            match = re.match(r'^([A-Z_]+)(\d+)$', image_data['filename'])
+            if match:
+                numbers = int(match.group(2))
+                formatted_numbers = f"{numbers:03}"
+
+                product_name = f"{product_model['prefix']}-{formatted_numbers}"
+                payload['name'] = product_name
+            else:
+                cleaned_name = image_data['filename'].replace('_', ' ').title().replace(' ', '')
+                payload['name'] = cleaned_name
         else:
-            payload['name'] = image_data['filename']
+            # Set product name
+            match = re.match('^([A-Z_]+?)(\d+)$', image_data['filename'])
+            if match:
+                # Extract and clean the components
+                letters = match.group(1)
+                numbers = match.group(2)
+
+                # Remove underscores and ensure uppercase
+                cleaned_letters = letters.replace('_', ' ')
+                capitalized_letters = cleaned_letters.title().replace(' ', '')
+
+                product_name = f"{capitalized_letters}-{numbers}"
+                payload['name'] = product_name
+            else:
+                # As a fallback, clean and capitalize the filename
+                cleaned_name = image_data['filename'].replace('_', ' ').title().replace(' ', '')
+                payload['name'] = cleaned_name
 
         # Set product description
         payload['description'] = payload['name']
